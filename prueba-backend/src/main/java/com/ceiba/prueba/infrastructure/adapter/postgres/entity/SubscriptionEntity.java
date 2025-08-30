@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "subscription",schema = "btg",
+@Table(name = "subscription",
         uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "fund_id"}))
 @Getter
 @Setter

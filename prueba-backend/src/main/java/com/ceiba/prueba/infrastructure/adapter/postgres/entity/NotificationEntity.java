@@ -3,7 +3,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 @Entity
-@Table(name = "notification",schema = "btg")
+@Table(name = "notification")
 @Getter
 @Setter
 public class NotificationEntity {

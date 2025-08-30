@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "fund_category",schema = "btg")
+@Table(name = "fund_category")
 @Getter
 @Setter
 public class FundCategoryEntity {

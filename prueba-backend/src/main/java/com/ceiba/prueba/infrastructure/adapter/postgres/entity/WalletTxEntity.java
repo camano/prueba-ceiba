@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "wallet_tx",schema = "btg")
+@Table(name = "wallet_tx")
 @Getter
 @Setter
 @AllArgsConstructor
