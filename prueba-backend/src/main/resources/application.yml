@@ -2,7 +2,7 @@ server:
   port: 9001
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/main
+    url: jdbc:postgresql://localhost:5432/dbceiba
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: root
