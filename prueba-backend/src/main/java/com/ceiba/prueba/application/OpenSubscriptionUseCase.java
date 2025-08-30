@@ -2,6 +2,7 @@ package com.ceiba.prueba.application;
 
 import com.ceiba.prueba.domain.fund.gateway.IFundRepositoryPort;
 import com.ceiba.prueba.domain.fund.models.Fund;
+import com.ceiba.prueba.domain.notification.gateway.INotificationPort;
 import com.ceiba.prueba.domain.suscription.gateway.ISubscriptionRepository;
 import com.ceiba.prueba.domain.suscription.models.Subscription;
 import com.ceiba.prueba.domain.suscription.models.SubscriptionStatus;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -29,12 +31,14 @@ public class OpenSubscriptionUseCase  {
     private final ISubscriptionRepository subscriptionRepository;
     private final IWalletRepositoryPort walletRepository;
     private final IWalletTxRepositoryPort walletTxRepository;
+    private final INotificationPort notification;
 
-    public OpenSubscriptionUseCase(IFundRepositoryPort fundRepository, ISubscriptionRepository subscriptionRepository, IWalletRepositoryPort walletRepository, IWalletTxRepositoryPort walletTxRepository) {
+    public OpenSubscriptionUseCase(IFundRepositoryPort fundRepository, ISubscriptionRepository subscriptionRepository, IWalletRepositoryPort walletRepository, IWalletTxRepositoryPort walletTxRepository, INotificationPort notification) {
         this.fundRepository = fundRepository;
         this.subscriptionRepository = subscriptionRepository;
         this.walletRepository = walletRepository;
         this.walletTxRepository = walletTxRepository;
+        this.notification = notification;
     }
 
     public Subscription  execute(Long userId, Long fundId, BigDecimal amount, String notifyChannel){
@@ -67,6 +71,12 @@ public class OpenSubscriptionUseCase  {
         s = subscriptionRepository.save(s);
 
         walletTxRepository.save(new WalletTx(null, userId, fundId, TransactionType.OPEN, amount, Instant.now(), s.getId()));
+
+        Map<String,Object> payload = Map.of(
+                "type","OPEN","fundName", fund.name(),"amount", amount.toPlainString());
+
+        //Service para notificar por email
+        //notification.enqueue(userId, s.getId(), notifyChannel, payload);
 
         return s;
     }

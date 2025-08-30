@@ -1,6 +1,17 @@
 server:
   port: 9001
 spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: camanojhonatan@gmail.com
+    password: tu-contraseña-o-app-password
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
   datasource:
     url: jdbc:postgresql://localhost:5432/dbceiba
     driver-class-name: org.postgresql.Driver
