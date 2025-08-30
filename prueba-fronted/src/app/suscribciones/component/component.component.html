@@ -1,0 +1,81 @@
+<!-- src/app/components/open-subscription/open-subscription.component.html -->
+<div class="container mt-4">
+  <h3>Abrir Suscripción</h3>
+
+  <form (ngSubmit)="open()" #form="ngForm">
+    <div class="mb-3">
+      <label class="form-label">Fondo</label>
+      <input type="number" [(ngModel)]="request.fundId" name="fundId" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Monto</label>
+      <input type="number" [(ngModel)]="request.amount" name="amount" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Canal de Notificación</label>
+      <select [(ngModel)]="request.notifyChannel" name="notifyChannel" class="form-select">
+        <option value="EMAIL">Email</option>
+        <option value="SMS">SMS</option>
+      </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary" [disabled]="loading">
+      {{ loading ? 'Procesando...' : 'Abrir Suscripción' }}
+    </button>
+  </form>
+
+  <div *ngIf="response" class="alert alert-success mt-3">
+    <strong>Suscripción creada:</strong><br />
+    ID: {{ response.id }}<br />
+    Fondo: {{ response.fundId }}<br />
+    Monto: {{ response.amount }}<br />
+    Estado: {{ response.status }}<br />
+    Fecha: {{ response.createdAt | date:'short' }}
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+    {{ errorMessage }}
+  </div>
+</div>
+
+
+<!-- src/app/components/transaction-history/transaction-history.component.html -->
+<div class="container mt-4">
+  <h3>Historial de Transacciones</h3>
+
+  <div *ngIf="loading">Cargando...</div>
+
+  <table *ngIf="!loading && transactions.length > 0" class="table table-striped">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Fondo</th>
+      <th>Tipo</th>
+      <th>Monto (COP)</th>
+      <th>Fecha</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let tx of transactions">
+      <td>{{ tx.id }}</td>
+      <td>{{ tx.fundId }}</td>
+      <td>
+          <span [ngClass]="{
+            'badge bg-success': tx.type === 'OPEN',
+            'badge bg-danger': tx.type === 'CANCEL'
+          }">
+            {{ tx.type }}
+          </span>
+      </td>
+      <td>{{ tx.amount | currency:'COP' }}</td>
+      <td>{{ tx.createdAt | date:'short' }}</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!loading && transactions.length === 0" class="alert alert-info">
+    No hay transacciones registradas.
+  </div>
+</div>
